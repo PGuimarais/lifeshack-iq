@@ -1,20 +1,151 @@
 # LifeShack IQ Local
 
-We are building LifeShack IQ, an agent that drives the business forward 
+# LifeShack IQ — Executive Summary
 
-The reason for building this is to track the great operational complexity of our business, while streamlining the steps our teammates take. Given our time constraints and the unique leverage agentic systems create, this is a great opportunity to revolutionize our business. 
+LifeShack IQ is an internal agent designed to help drive the business forward by monitoring company operations, identifying issues, coordinating teammates, and continuously improving how we execute.
 
-This system is aligned with our objective to make LifeShack an incredible success. The way it does this is by examining every facet of our business, it defines and tracks goals, delegates work, all whilst reflecting and improving its own process.
+The system exists because LifeShack has growing operational complexity across product, applications, customers, revenue, infrastructure, and team workflows. Given our time constraints and the leverage of agentic systems, LifeShack IQ gives us a way to track the business, reduce manual coordination, and accelerate execution.
 
-It has access to a roster of teammates along with their strengths, weaknesses, and abilities. 
+The agent builds context from company data, teammate updates, Slack conversations, goals, initiatives, and tasks. It understands our current operating state, identifies what matters most, follows up with teammates, assigns work, and reflects on whether strategies are working.
 
-It is able to read in all the business context: our operational data, customer data, revenue data, as well as active goals, initiatives, and tasks to understand where we are in the business at this moment in time.
+It has access to a roster of teammates, including their strengths, weaknesses, responsibilities, and abilities. It can use this context to route work appropriately and support each person individually.
 
-Once a clear understanding is established of the business and active momentum, the agent uses its reasoning capabilities to move the business forward in execution of tasks as well as by evolving strategies, tactics, and objectives to grow.
+## Core Data Sources
 
-Every morning the Agent retrieves fresh company data [0].
+LifeShack IQ pulls from:
 
-First thing it does is screen for critical issues [1] and notifies the team if there is anything critical happening. It does this by examining relevant company data sources and apis [2]. 
+* Granola notes
+* Slack
+* AWS CLI
+* Stripe API
+* PostHog analytics
+* Operations data
+* Application volume data
+* User account data
+* Revenue data
+* Active goals, initiatives, and tasks
+
+## Daily Workflow
+
+Every morning, LifeShack IQ retrieves fresh company data and updates its understanding of the business.
+
+### 1. Critical Issue Screening
+
+The first step is to check for critical issues across company systems, APIs, operations, revenue, application volume, and customer data.
+
+The agent maintains a list of known issues and compares new data against that list.
+
+If an issue is new and critical, it notifies the team.
+
+If an issue is known and still critical, it notifies the team unless the issue has been snoozed. Snoozes last 48 hours and can be set by a teammate.
+
+At 8am EST:
+
+* If there are critical issues, the agent texts the group.
+* If there are no critical issues, it sends a “no issues” celebration message.
+
+Critical issues include anything that significantly harms users, blocks a core service, or indicates a major provider/tool failure.
+
+Examples:
+
+* A main job board suddenly outputs zero applications.
+* Job boards stop enqueueing.
+* AshbyHQ applications fill out user names incorrectly.
+* OpenAI credits run out.
+* Proxy billing fails or proxies become unreachable.
+* Resume generation repeatedly fails.
+* Cancellations spike with feedback pointing to a system issue.
+
+Criteria:
+
+* The issue impacts many users consistently.
+* The issue significantly hurts user experience.
+* A core service is fully or partially down.
+* A key API, data provider, proxy, or tool is out of credits or unreachable.
+
+### 2. Individual Teammate Check-Ins
+
+The agent checks in with teammates individually on a configurable schedule.
+
+Example: Manik at 8am.
+
+The check-in can include:
+
+* Following up on in-progress tasks
+* Discussing current initiatives
+* Suggesting ideas
+* Assigning relevant tasks
+* Requesting approval for sensitive actions
+
+Sensitive actions require approval before execution. Examples include refunds, customer emails, transactions, or other actions with external impact.
+
+Based on these conversations, the agent can update goals, tasks, and initiatives.
+
+### 3. Daily Group Status Update
+
+The agent posts a daily status update to the team.
+
+This report combines teammate updates, operational data, application volume, revenue updates, user/account data, active goals, and progress against current initiatives.
+
+The goal is to give the team a clear view of where the business stands and what needs attention.
+
+## Weekly Reflection
+
+Once per week, LifeShack IQ performs a deeper review of:
+
+* Company data
+* Slack conversations
+* Granola notes
+* Teammate updates
+* Goals
+* Initiatives
+* Tasks
+* Recent outcomes
+
+It then synthesizes next steps, including:
+
+* Process changes
+* New opportunities
+* Emerging issues
+* Strategy adjustments
+* Goal updates
+* Evaluation of current efforts
+
+For active strategies, it assigns a status:
+
+* `NOT_ENOUGH_DATA`
+* `NOT_WORKING`
+* `WORKING`
+
+## Interface
+
+LifeShack IQ operates primarily through Slack.
+
+It will:
+
+* Post in the `daily-update` channel
+* Message teammates individually
+* Read relevant Slack channels to build context
+* Notify the group when critical issues arise
+* Coordinate follow-ups, tasks, and approvals
+
+## Core Capabilities
+
+LifeShack IQ can:
+
+* Assess the current business state using previous state plus new information
+* Monitor critical issues
+* Track goals and initiatives
+* Modify goals as new information emerges
+* Identify tasks
+* Assign work to teammates
+* Follow up on execution
+* Request approval for sensitive actions
+* Reflect on whether current strategies are working
+* Recommend process, strategy, and operational improvements
+
+The goal is for LifeShack IQ to become an operational intelligence layer for the company: always aware of what is happening, always helping the team focus, and always pushing the business toward success.
+
 
 
 LifeShack IQ is a local Slack-native operating daemon for LifeShack. This repo implements the Phase 1-12 foundation: a TypeScript runtime, Slack Socket Mode command surface, SQLite persistence with Drizzle ORM, a durable local job queue, readiness-gated workflow scheduler/worker, OpenAI-backed structured agent execution with fake-mode fallback, default meta configuration, prompt module seeds, and local health checks.
