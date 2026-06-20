@@ -1,0 +1,12 @@
+{
+  "grossRevenueCents": 1250000,
+  "netRevenueCents": 1180000,
+  "mrrCents": 3300000,
+  "previousMrrCents": 3260000,
+  "newSubscriptions": 18,
+  "cancellations": 2,
+  "previousCancellations": 3,
+  "cancellationRate": 0.02,
+  "previousCancellationRate": 0.025,
+  "refundCents": 0
+}

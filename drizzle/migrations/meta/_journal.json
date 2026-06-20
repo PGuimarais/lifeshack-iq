@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1781989518474,
+      "tag": "0000_grey_misty_knight",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1781993844409,
+      "tag": "0001_good_silvermane",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1781997484801,
+      "tag": "0002_organic_zeigeist",
+      "breakpoints": true
+    }
+  ]
+}

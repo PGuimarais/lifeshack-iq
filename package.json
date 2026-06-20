@@ -1,0 +1,43 @@
+{
+  "name": "lifeshack-iq",
+  "version": "0.1.0",
+  "description": "LifeShack IQ local Slack-native operating daemon.",
+  "private": true,
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "build": "tsup src/index.ts --format cjs --platform node --out-dir dist --external better-sqlite3",
+    "start": "node dist/index.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "verify": "npm run lint && npm run test && npm run build && npm run db:migrate && npm run db:health",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "tsx src/db/migrate.ts",
+    "db:health": "tsx src/db/health.ts",
+    "lint": "tsc --noEmit"
+  },
+  "keywords": [
+    "lifeshack",
+    "slack",
+    "sqlite"
+  ],
+  "author": "",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@slack/bolt": "^4.7.3",
+    "better-sqlite3": "^12.11.1",
+    "dotenv": "^17.4.2",
+    "drizzle-orm": "^0.45.2",
+    "pino": "^10.3.1",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/node": "^26.0.0",
+    "drizzle-kit": "^0.31.10",
+    "tsup": "^8.5.1",
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.9"
+  }
+}

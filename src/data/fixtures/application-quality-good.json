@@ -1,0 +1,8 @@
+{
+  "totalApplications": 240,
+  "lowQualityApplications": 8,
+  "missingResumeCount": 1,
+  "failedQualityChecks": 4,
+  "qualityScore": 0.94,
+  "previousQualityScore": 0.93
+}

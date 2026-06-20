@@ -1,0 +1,41 @@
+{
+  "applicationVolume": {
+    "submitted": 240,
+    "previousSubmitted": 230,
+    "started": 260,
+    "successRate": 0.92,
+    "previousSuccessRate": 0.91
+  },
+  "ats": [
+    {
+      "name": "Greenhouse",
+      "status": "ok",
+      "successRate": 0.95,
+      "previousSuccessRate": 0.94,
+      "errorRate": 0.01,
+      "applicationsSubmitted": 120
+    },
+    {
+      "name": "Lever",
+      "status": "ok",
+      "successRate": 0.9,
+      "previousSuccessRate": 0.89,
+      "errorRate": 0.03,
+      "applicationsSubmitted": 90
+    }
+  ],
+  "providerBalances": [
+    {
+      "provider": "OpenAI",
+      "balanceCents": 50000,
+      "minimumBalanceCents": 10000,
+      "currency": "usd"
+    },
+    {
+      "provider": "Captcha",
+      "balanceCents": 25000,
+      "minimumBalanceCents": 10000,
+      "currency": "usd"
+    }
+  ]
+}

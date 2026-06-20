@@ -1,0 +1,14 @@
+[
+  {
+    "provider": "OpenAI",
+    "balanceCents": 4000,
+    "minimumBalanceCents": 10000,
+    "currency": "usd"
+  },
+  {
+    "provider": "Captcha",
+    "missing": true,
+    "minimumBalanceCents": 10000,
+    "currency": "usd"
+  }
+]

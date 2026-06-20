@@ -1,0 +1,42 @@
+{
+  "applicationVolume": {
+    "submitted": 72,
+    "previousSubmitted": 240,
+    "started": 92,
+    "successRate": 0.56,
+    "previousSuccessRate": 0.92
+  },
+  "ats": [
+    {
+      "name": "Greenhouse",
+      "status": "outage",
+      "successRate": 0.12,
+      "previousSuccessRate": 0.95,
+      "errorRate": 0.78,
+      "applicationsSubmitted": 12,
+      "message": "Most submissions are failing at final submit."
+    },
+    {
+      "name": "Lever",
+      "status": "degraded",
+      "successRate": 0.64,
+      "previousSuccessRate": 0.9,
+      "errorRate": 0.18,
+      "applicationsSubmitted": 60
+    }
+  ],
+  "providerBalances": [
+    {
+      "provider": "OpenAI",
+      "balanceCents": 4000,
+      "minimumBalanceCents": 10000,
+      "currency": "usd"
+    },
+    {
+      "provider": "Captcha",
+      "missing": true,
+      "minimumBalanceCents": 10000,
+      "currency": "usd"
+    }
+  ]
+}
