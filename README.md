@@ -1,5 +1,22 @@
 # LifeShack IQ Local
 
+We are building LifeShack IQ, an agent that drives the business forward 
+
+The reason for building this is to track the great operational complexity of our business, while streamlining the steps our teammates take. Given our time constraints and the unique leverage agentic systems create, this is a great opportunity to revolutionize our business. 
+
+This system is aligned with our objective to make LifeShack an incredible success. The way it does this is by examining every facet of our business, it defines and tracks goals, delegates work, all whilst reflecting and improving its own process.
+
+It has access to a roster of teammates along with their strengths, weaknesses, and abilities. 
+
+It is able to read in all the business context: our operational data, customer data, revenue data, as well as active goals, initiatives, and tasks to understand where we are in the business at this moment in time.
+
+Once a clear understanding is established of the business and active momentum, the agent uses its reasoning capabilities to move the business forward in execution of tasks as well as by evolving strategies, tactics, and objectives to grow.
+
+Every morning the Agent retrieves fresh company data [0].
+
+First thing it does is screen for critical issues [1] and notifies the team if there is anything critical happening. It does this by examining relevant company data sources and apis [2]. 
+
+
 LifeShack IQ is a local Slack-native operating daemon for LifeShack. This repo implements the Phase 1-12 foundation: a TypeScript runtime, Slack Socket Mode command surface, SQLite persistence with Drizzle ORM, a durable local job queue, readiness-gated workflow scheduler/worker, OpenAI-backed structured agent execution with fake-mode fallback, default meta configuration, prompt module seeds, and local health checks.
 It now also includes the Phase 7-9 data and intelligence layer: local fixture/manual data connectors, daily snapshots, hard-failure critical issue rules, issue upserts, and Slack-ready daily reports.
 Phases 10-12 add execution management, durable approval safety, compressed/checksummed SQLite backups with optional S3 upload, hardened read-only connector wrappers, operational readiness checks, configured workflow schedules, teammate check-ins, and safe OpenAI tool calling.
