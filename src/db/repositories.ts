@@ -396,15 +396,21 @@ const defaultPromptModules = [
   },
   {
     name: "weekly_reflection_prompt",
-    description: "Future weekly reflection workflow prompt.",
+    description: "Weekly operating reflection workflow prompt.",
     promptText:
-      "Reflect on the week of company data and classify strategies as WORKING, NOT_WORKING, or NOT_ENOUGH_DATA."
+      "Reflect on the full weekly operating context: company data, Slack/check-in context, Granola meeting notes, teammate updates, goals, initiatives, tasks, issues, outcomes, and recent operating events. Identify process changes, opportunities, emerging issues, strategy adjustments, goal updates, and whether active strategies are WORKING, NOT_WORKING, or NOT_ENOUGH_DATA. Use safe internal tools only when evidence supports concrete internal follow-up."
   },
   {
     name: "teammate_checkin_prompt",
-    description: "Future teammate check-in workflow prompt.",
+    description: "Teammate check-in workflow prompt.",
     promptText:
       "Check in with a teammate about active tasks, blockers, and relevant next actions."
+  },
+  {
+    name: "teammate_checkin_reply_prompt",
+    description: "Teammate check-in reply interpretation prompt.",
+    promptText:
+      "Process a teammate's check-in reply. Extract progress, blockers, action items, goal or initiative updates, approvals needed, and durable context. Use safe internal tools to create concrete tasks, create initiatives, propose or explicitly update goals, record context notes, and request approvals when the reply supports it. Do not invent commitments; only update operating state when the teammate's reply provides evidence."
   },
   {
     name: "granola_transcript_prompt",

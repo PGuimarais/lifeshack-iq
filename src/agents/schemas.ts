@@ -34,3 +34,18 @@ export const granolaTranscriptOutputSchema = z.object({
 });
 
 export type GranolaTranscriptOutput = z.infer<typeof granolaTranscriptOutputSchema>;
+
+export const checkinReplyOutputSchema = z.object({
+  status: z.enum(["processed", "needs_review"]).default("processed"),
+  summary: z.string(),
+  progressUpdates: z.array(z.string()).default([]),
+  blockers: z.array(z.string()).default([]),
+  actionItems: z.array(z.string()).default([]),
+  goalOrInitiativeUpdates: z.array(z.string()).default([]),
+  approvalsNeeded: z.array(z.string()).default([]),
+  updatesMade: z.array(z.string()).default([]),
+  followUps: z.array(z.string()).default([]),
+  confidence: z.number().min(0).max(1).default(0.5)
+});
+
+export type CheckinReplyOutput = z.infer<typeof checkinReplyOutputSchema>;

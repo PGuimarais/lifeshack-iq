@@ -249,6 +249,8 @@ These workflows are infrastructure-first. They do not call customer email, refun
 
 `critical-scan` and `daily-report` now use local fixture/manual data to create `daily_snapshots`, detect only obvious hard failures deterministically, and upsert those `issues`. Deterministic criticals are intentionally narrow: explicit ATS outages, zero submissions after prior volume, zero success after prior success, and provider missing/zero-credit failures. Softer anomalies are left to the agent/reporting layer rather than being auto-escalated as critical issues.
 
+`weekly-reflection` now builds a full operating context before running the agent. The input includes fresh and recent company snapshots, teammates, goals, initiatives, open and recently closed tasks, open issues, teammate check-in replies, Granola transcript summaries, durable context notes, and recent operating events. The agent can use safe internal tools to create follow-up tasks, initiatives, context notes, proposed goals, explicit goal updates, and approval requests.
+
 Scheduled daily and weekly operating workflows are gated by `/iq readiness`. Startup and recurrence scheduling both require:
 
 - `IQ_ENABLE_SCHEDULED_PRODUCTION_WORKFLOWS=true`
@@ -257,7 +259,7 @@ Scheduled daily and weekly operating workflows are gated by `/iq readiness`. Sta
 
 Manual `/iq run ...` commands still work for local testing. Use `/iq schedule` and `/iq schedule set ...` to inspect or retime configured schedules.
 
-When Slack is configured, completed scheduled critical scans, daily reports, and weekly reflections post their summaries to the configured Slack channel. The teammate check-in workflow sends real Slack DMs to configured teammates and records replies from Slack DM events in `checkins`. Slack notification failures are logged and do not rewrite completed workflow jobs as failed.
+When Slack is configured, completed scheduled critical scans, daily reports, and weekly reflections post their summaries to the configured Slack channel. The teammate check-in workflow sends real Slack DMs to configured teammates, records replies from Slack DM events in `checkins`, and runs the check-in reply through the agent to update tasks, goals, initiatives, approvals, and durable context where the reply supports it. Slack notification failures are logged and do not rewrite completed workflow jobs as failed.
 
 ## Operating Model
 

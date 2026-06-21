@@ -37,6 +37,26 @@ export function createFakeAgentClient(): ModelClient {
         };
       }
 
+      if (input.promptModuleName === "teammate_checkin_reply_prompt") {
+        const output = {
+          status: "processed",
+          summary: `Check-in reply processed in fake agent mode. ${summarizeInput(input.input)}`,
+          progressUpdates: [],
+          blockers: [],
+          actionItems: [],
+          goalOrInitiativeUpdates: [],
+          approvalsNeeded: [],
+          updatesMade: [],
+          followUps: [],
+          confidence: 0.42
+        };
+
+        return {
+          output: input.outputSchema.parse(output),
+          rawText: JSON.stringify(output)
+        };
+      }
+
       const baseOutput = {
         status: "ok",
         summary: `${input.workflowType} completed in fake agent mode. ${summarizeInput(input.input)}`,

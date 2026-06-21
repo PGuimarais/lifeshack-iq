@@ -26,14 +26,18 @@ export type CreateTaskInput = {
   links?: unknown;
 };
 
-export function listOpenTasks(limit = 20) {
+export function listTasks(input: { statuses?: TaskStatus[]; limit?: number } = {}) {
   return getDb()
     .select()
     .from(tasks)
-    .where(inArray(tasks.status, ["open", "in_progress", "blocked"]))
+    .where(input.statuses ? inArray(tasks.status, input.statuses) : undefined)
     .orderBy(asc(tasks.createdAt))
-    .limit(limit)
+    .limit(input.limit ?? 50)
     .all();
+}
+
+export function listOpenTasks(limit = 20) {
+  return listTasks({ statuses: ["open", "in_progress", "blocked"], limit });
 }
 
 export function getTask(taskId: string) {
