@@ -91,6 +91,7 @@ export function formatIqHelp(): string {
     "/iq approval approve <id> - approve and execute a stub handler",
     "/iq approval reject <id> - reject an approval",
     "/iq backup status - show latest SQLite backup",
+    "/add-granola - paste a Granola meeting transcript for IQ to process",
     "/iq run critical-scan - enqueue deterministic critical scan",
     "/iq run critical-scan --agent - add fake-agent Slack-ready synthesis",
     "/iq run daily-report - enqueue deterministic company report",

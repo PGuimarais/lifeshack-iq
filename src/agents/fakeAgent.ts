@@ -16,6 +16,27 @@ export function createFakeAgentClient(): ModelClient {
     name: "fake_agent",
     model: "fake-local-structured-v1",
     async generateStructured(input: StructuredGenerationInput) {
+      if (input.promptModuleName === "granola_transcript_prompt") {
+        const output = {
+          status: "processed",
+          summary: `Granola transcript processed in fake agent mode. ${summarizeInput(input.input)}`,
+          decisions: [],
+          actionItems: [],
+          risks: [],
+          contextNotes: [
+            "Fake mode recorded a durable meeting summary fallback without calling live OpenAI."
+          ],
+          updatesMade: [],
+          followUps: [],
+          confidence: 0.42
+        };
+
+        return {
+          output: input.outputSchema.parse(output),
+          rawText: JSON.stringify(output)
+        };
+      }
+
       const baseOutput = {
         status: "ok",
         summary: `${input.workflowType} completed in fake agent mode. ${summarizeInput(input.input)}`,

@@ -41,6 +41,10 @@ import {
   formatApprovalDetails,
   formatApprovalList
 } from "./approvalMessages";
+import {
+  formatAddGranolaUsage,
+  handleAddGranolaCommand
+} from "./granolaCommands";
 import { formatIssueList, handleIssueCommand } from "./issueCommands";
 import {
   formatGoalList,
@@ -282,6 +286,29 @@ export function registerCommandHandlers(app: App): void {
       await respond(formatIqHelp());
     } catch (error) {
       logger.error({ err: error }, "Failed to handle /iq command");
+      await respond(safeErrorMessage);
+    }
+  });
+
+  app.command("/add-granola", async ({ command, ack, respond }) => {
+    await ack();
+
+    try {
+      if (!command.text.trim()) {
+        await respond(formatAddGranolaUsage());
+        return;
+      }
+
+      await respond("Got it. Processing the Granola transcript now.");
+      await respond(
+        await handleAddGranolaCommand({
+          text: command.text,
+          slackUserId: command.user_id,
+          channelId: command.channel_id
+        })
+      );
+    } catch (error) {
+      logger.error({ err: error }, "Failed to handle /add-granola command");
       await respond(safeErrorMessage);
     }
   });

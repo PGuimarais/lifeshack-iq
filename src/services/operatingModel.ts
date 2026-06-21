@@ -38,6 +38,18 @@ export type CreateGoalInput = {
   status?: "proposed" | "active" | "paused" | "completed" | "cancelled";
 };
 
+export type UpdateGoalInput = {
+  name?: string;
+  description?: string;
+  area?: string;
+  ownerSlackUserId?: string;
+  ownerPersonId?: string;
+  targetMetric?: string;
+  targetValue?: string;
+  dueDate?: string;
+  status?: "proposed" | "active" | "paused" | "completed" | "cancelled";
+};
+
 export type CreateInitiativeInput = {
   goalId?: string;
   name: string;
@@ -257,6 +269,42 @@ export function assignGoalOwner(goalId: string, slackUserId: string, actorSlackU
     targetType: "goal",
     targetId: goalId,
     after: { ownerPersonId: owner.id }
+  });
+  return getGoal(goalId);
+}
+
+export function updateGoal(
+  goalId: string,
+  input: UpdateGoalInput,
+  actorSlackUserId?: string
+) {
+  const existing = getGoal(goalId);
+  const owner = resolveOwner(input);
+  const timestamp = nowIso();
+  const next = {
+    name: input.name?.trim() || existing.name,
+    description: input.description ?? existing.description,
+    area: input.area ?? existing.area,
+    ownerPersonId: owner?.id ?? input.ownerPersonId ?? existing.ownerPersonId,
+    targetMetric: input.targetMetric ?? existing.targetMetric,
+    targetValue: input.targetValue ?? existing.targetValue,
+    dueDate: input.dueDate ?? existing.dueDate,
+    status: input.status ?? existing.status,
+    updatedAt: timestamp
+  };
+
+  getDb()
+    .update(goals)
+    .set(next)
+    .where(eq(goals.id, goalId))
+    .run();
+  createConfigEvent({
+    eventType: "goal_updated",
+    actorSlackUserId,
+    targetType: "goal",
+    targetId: goalId,
+    before: existing,
+    after: next
   });
   return getGoal(goalId);
 }

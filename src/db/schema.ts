@@ -200,6 +200,41 @@ export const checkins = sqliteTable("checkins", {
   createdAtIdx: index("checkins_created_at_idx").on(table.createdAt)
 }));
 
+export const granolaTranscripts = sqliteTable("granola_transcripts", {
+  id: text("id").primaryKey(),
+  title: text("title").notNull(),
+  transcriptText: text("transcript_text").notNull(),
+  capturedBySlackUserId: text("captured_by_slack_user_id"),
+  sourceChannelId: text("source_channel_id"),
+  processingStatus: text("processing_status").notNull().default("pending"),
+  summary: text("summary"),
+  agentRunId: text("agent_run_id").references(() => agentRuns.id),
+  createdAt: text("created_at").notNull(),
+  updatedAt: text("updated_at").notNull()
+}, (table) => ({
+  statusIdx: index("granola_transcripts_status_idx").on(table.processingStatus),
+  createdAtIdx: index("granola_transcripts_created_at_idx").on(table.createdAt)
+}));
+
+export const contextEntries = sqliteTable("context_entries", {
+  id: text("id").primaryKey(),
+  sourceType: text("source_type").notNull(),
+  sourceId: text("source_id"),
+  title: text("title").notNull(),
+  body: text("body").notNull(),
+  tagsJson: text("tags_json"),
+  importance: text("importance").notNull().default("medium"),
+  relatedGoalId: text("related_goal_id").references(() => goals.id),
+  relatedInitiativeId: text("related_initiative_id").references(() => initiatives.id),
+  relatedTaskId: text("related_task_id").references(() => tasks.id),
+  createdAt: text("created_at").notNull(),
+  updatedAt: text("updated_at").notNull()
+}, (table) => ({
+  sourceIdx: index("context_entries_source_idx").on(table.sourceType, table.sourceId),
+  importanceIdx: index("context_entries_importance_idx").on(table.importance),
+  createdAtIdx: index("context_entries_created_at_idx").on(table.createdAt)
+}));
+
 export const metaConfigs = sqliteTable("meta_configs", {
   id: text("id").primaryKey(),
   namespace: text("namespace").notNull(),

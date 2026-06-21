@@ -19,7 +19,7 @@ The example environment points the required read-only connectors at local fixtur
 
 - Requires a Slack app with Socket Mode enabled.
 - Set `SLACK_BOT_TOKEN`, `SLACK_APP_TOKEN`, and `SLACK_SIGNING_SECRET`.
-- Register `/iq` and `/meta` slash commands in Slack.
+- Register `/iq`, `/meta`, and `/add-granola` slash commands in Slack.
 - Set `IQ_DAILY_UPDATE_CHANNEL_ID` for scheduled daily report posts.
 - Optionally set `IQ_CRITICAL_ALERT_CHANNEL_ID` and `IQ_WEEKLY_REFLECTION_CHANNEL_ID`; both fall back to `IQ_DAILY_UPDATE_CHANNEL_ID`.
 - When Slack credentials are missing, the daemon starts locally with Slack disabled.
@@ -67,6 +67,7 @@ The example environment points the required read-only connectors at local fixtur
 - `/iq approval approve <id>`
 - `/iq approval reject <id>`
 - `/iq backup status`
+- `/add-granola`
 - `/meta show`
 - `/meta learn <instruction>`
 - `/meta set <target> <json-or-text>`
@@ -160,6 +161,8 @@ Optional context connectors:
 - Slack context: `IQ_SLACK_CONTEXT_PATH` or `IQ_SLACK_CONTEXT_LIVE_ENABLED=true` with `SLACK_BOT_TOKEN` and comma-separated `IQ_SLACK_CONTEXT_CHANNELS`
 - Granola notes: `IQ_GRANOLA_NOTES_DIR`
 
+Pasted meeting transcripts can also be added directly from Slack with `/add-granola`. IQ stores the raw transcript, runs the agent over the transcript plus current teammates/goals/initiatives/tasks/issues, records durable context, and uses safe internal tools to create tasks, create initiatives, propose or update goals, and request approvals when the transcript supports it.
+
 The live connector URLs should be read-only aggregation endpoints that return the same JSON shapes used by the fixtures. Connector calls have timeout/retry wrappers, health checks, fallback data, and secret redaction.
 
 ## Readiness
@@ -188,7 +191,10 @@ Safe internal tools available to the model:
 
 - `read_open_issues`
 - `create_task`
+- `create_initiative`
 - `propose_goal`
+- `update_goal`
+- `record_context_note`
 - `request_approval`
 
 These tools can read and update IQ’s internal operating state but cannot execute sensitive customer, billing, AWS, email, or production side effects. Sensitive work remains approval-gated.

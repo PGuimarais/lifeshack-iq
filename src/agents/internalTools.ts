@@ -1,5 +1,6 @@
 import { createApprovalRequest } from "../services/approvals";
-import { createGoal } from "../services/operatingModel";
+import { createContextEntry } from "../services/contextEntries";
+import { createGoal, createInitiative, updateGoal } from "../services/operatingModel";
 import { listOpenIssues } from "../services/issues";
 import { createTask, type TaskPriority } from "../services/tasks";
 
@@ -76,6 +77,23 @@ export function getOpenAiToolDefinitions(): OpenAiToolDefinition[] {
     },
     {
       type: "function",
+      name: "create_initiative",
+      description:
+        "Create a LifeShack initiative linked to an optional goal. Use when meeting notes identify a concrete stream of work.",
+      strict: true,
+      parameters: toolSchema({
+        goalId: nullableString("Related goal ID, if known."),
+        name: {
+          type: "string",
+          description: "Initiative name."
+        },
+        description: nullableString("Initiative description."),
+        ownerSlackUserId: nullableString("Slack user ID for owner, if known."),
+        progress: nullableString("Current progress or status note.")
+      })
+    },
+    {
+      type: "function",
       name: "propose_goal",
       description:
         "Create a proposed LifeShack business goal for human review. Proposed goals do not mark work as committed.",
@@ -91,6 +109,63 @@ export function getOpenAiToolDefinitions(): OpenAiToolDefinition[] {
         targetMetric: nullableString("Metric this goal should move."),
         targetValue: nullableString("Target value for the metric."),
         dueDate: nullableString("Due date as YYYY-MM-DD, if known.")
+      })
+    },
+    {
+      type: "function",
+      name: "update_goal",
+      description:
+        "Update an existing goal only when the transcript explicitly changes its owner, status, target, due date, or description.",
+      strict: true,
+      parameters: toolSchema({
+        goalId: {
+          type: "string",
+          description: "Existing goal ID to update."
+        },
+        name: nullableString("Replacement goal name, if explicitly changed."),
+        description: nullableString("Replacement or clarified goal description, if explicitly changed."),
+        area: nullableString("Business area, if explicitly changed."),
+        ownerSlackUserId: nullableString("Slack user ID for owner, if explicitly assigned."),
+        targetMetric: nullableString("Target metric, if explicitly changed."),
+        targetValue: nullableString("Target value, if explicitly changed."),
+        dueDate: nullableString("Due date as YYYY-MM-DD, if explicitly changed."),
+        status: {
+          type: ["string", "null"],
+          enum: ["proposed", "active", "paused", "completed", "cancelled", null],
+          description: "Goal status, if explicitly changed."
+        }
+      })
+    },
+    {
+      type: "function",
+      name: "record_context_note",
+      description:
+        "Record durable business context from a meeting, such as decisions, customer insights, risks, strategy notes, or constraints.",
+      strict: true,
+      parameters: toolSchema({
+        title: {
+          type: "string",
+          description: "Short title for the context note."
+        },
+        body: {
+          type: "string",
+          description: "Concrete context note with enough detail to be useful later."
+        },
+        tags: {
+          type: "array",
+          items: {
+            type: "string"
+          },
+          description: "Searchable tags."
+        },
+        importance: {
+          type: "string",
+          enum: ["low", "medium", "high"],
+          description: "Context importance."
+        },
+        relatedGoalId: nullableString("Related goal ID, if known."),
+        relatedInitiativeId: nullableString("Related initiative ID, if known."),
+        relatedTaskId: nullableString("Related task ID, if known.")
       })
     },
     {
@@ -174,6 +249,17 @@ export async function executeInternalTool(
     return { task };
   }
 
+  if (name === "create_initiative") {
+    const initiative = createInitiative({
+      goalId: stringOrUndefined(input.goalId),
+      name: stringOrUndefined(input.name) ?? "Untitled initiative",
+      description: stringOrUndefined(input.description),
+      ownerSlackUserId: stringOrUndefined(input.ownerSlackUserId),
+      progress: stringOrUndefined(input.progress)
+    });
+    return { initiative };
+  }
+
   if (name === "propose_goal") {
     const goal = createGoal({
       name: stringOrUndefined(input.name) ?? "Untitled proposed goal",
@@ -186,6 +272,50 @@ export async function executeInternalTool(
       status: "proposed"
     });
     return { goal };
+  }
+
+  if (name === "update_goal") {
+    const goalId = stringOrUndefined(input.goalId);
+
+    if (!goalId) {
+      throw new Error("update_goal requires goalId.");
+    }
+
+    const goal = updateGoal(goalId, {
+      name: stringOrUndefined(input.name),
+      description: stringOrUndefined(input.description),
+      area: stringOrUndefined(input.area),
+      ownerSlackUserId: stringOrUndefined(input.ownerSlackUserId),
+      targetMetric: stringOrUndefined(input.targetMetric),
+      targetValue: stringOrUndefined(input.targetValue),
+      dueDate: stringOrUndefined(input.dueDate),
+      status: stringOrUndefined(input.status) as
+        | "proposed"
+        | "active"
+        | "paused"
+        | "completed"
+        | "cancelled"
+        | undefined
+    });
+    return { goal };
+  }
+
+  if (name === "record_context_note") {
+    const tags = Array.isArray(input.tags)
+      ? input.tags.filter((tag): tag is string => typeof tag === "string")
+      : [];
+    const contextEntry = createContextEntry({
+      sourceType: "agent_tool",
+      sourceId: context.proposedByRunId,
+      title: stringOrUndefined(input.title) ?? "Meeting context",
+      body: stringOrUndefined(input.body) ?? "No context body provided.",
+      tags,
+      importance: (stringOrUndefined(input.importance) ?? "medium") as "low" | "medium" | "high",
+      relatedGoalId: stringOrUndefined(input.relatedGoalId),
+      relatedInitiativeId: stringOrUndefined(input.relatedInitiativeId),
+      relatedTaskId: stringOrUndefined(input.relatedTaskId)
+    });
+    return { contextEntry };
   }
 
   if (name === "request_approval") {

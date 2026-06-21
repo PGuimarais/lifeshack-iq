@@ -20,3 +20,17 @@ export const metaInterpreterOutputSchema = z.object({
 });
 
 export type MetaInterpreterOutput = z.infer<typeof metaInterpreterOutputSchema>;
+
+export const granolaTranscriptOutputSchema = z.object({
+  status: z.enum(["processed", "needs_review"]).default("processed"),
+  summary: z.string(),
+  decisions: z.array(z.string()).default([]),
+  actionItems: z.array(z.string()).default([]),
+  risks: z.array(z.string()).default([]),
+  contextNotes: z.array(z.string()).default([]),
+  updatesMade: z.array(z.string()).default([]),
+  followUps: z.array(z.string()).default([]),
+  confidence: z.number().min(0).max(1).default(0.5)
+});
+
+export type GranolaTranscriptOutput = z.infer<typeof granolaTranscriptOutputSchema>;

@@ -22,6 +22,13 @@
       "when": 1781997484801,
       "tag": "0002_organic_zeigeist",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1782001034056,
+      "tag": "0003_curvy_daimon_hellstrom",
+      "breakpoints": true
     }
   ]
 }

@@ -18,6 +18,11 @@ export type RunAgentInput<TSchema extends z.ZodTypeAny> = {
 export type RunAgentResult<TSchema extends z.ZodTypeAny> = {
   agentRunId: string;
   output: z.infer<TSchema>;
+  toolCalls: Array<{
+    name: string;
+    arguments: unknown;
+    output: unknown;
+  }>;
   promptVersion: {
     moduleName: string;
     versionId: string;
@@ -157,6 +162,7 @@ export async function runAgent<TSchema extends z.ZodTypeAny>(
     return {
       agentRunId,
       output,
+      toolCalls: response.toolCalls ?? [],
       promptVersion
     };
   } catch (error) {

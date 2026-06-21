@@ -116,7 +116,7 @@ function buildSystemPrompt(input: StructuredGenerationInput): string {
     "- Use only the supplied business context as evidence.",
     "- Separate facts, inferences, risks, and recommended actions.",
     "- Be concise, operationally useful, and specific about owners or next steps when evidence supports them.",
-    "- Use safe internal tools when they materially help: read issues, create concrete tasks, propose goals, or request approvals.",
+    "- Use safe internal tools when they materially help: read issues, create concrete tasks, create initiatives, propose or update goals, record context notes, or request approvals.",
     "- Do not claim to execute refunds, emails, transactions, AWS changes, or production changes.",
     "- Any sensitive action must remain a recommendation that requires explicit approval."
   ].join("\n");

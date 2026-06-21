@@ -407,6 +407,12 @@ const defaultPromptModules = [
       "Check in with a teammate about active tasks, blockers, and relevant next actions."
   },
   {
+    name: "granola_transcript_prompt",
+    description: "Meeting transcript ingestion prompt.",
+    promptText:
+      "Process a pasted meeting transcript. Extract decisions, action items, risks, goals, initiatives, tasks, and durable business context. Use safe internal tools to record context notes, create concrete tasks, create initiatives, propose or explicitly update goals, and request approvals when sensitive actions are discussed. Do not invent commitments; only update operating state when the transcript supports it."
+  },
+  {
     name: "meta_interpreter_prompt",
     description: "Future meta feedback interpretation prompt.",
     promptText:
